@@ -1,0 +1,4 @@
+- command: sudo amazon-linux-extras install "{{ item }}" -y
+  with_items: "{{ java_packages }}"
+  args:
+    creates: /usr/bin/java

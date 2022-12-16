@@ -1,0 +1,5 @@
+---
+# JDK version options include:
+#   - java-openjdk11
+__java_packages:
+  - java-openjdk11

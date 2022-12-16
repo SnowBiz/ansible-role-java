@@ -1,4 +1,8 @@
 ---
+- name: Include version-specific variables for Amazon Linux.
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when: ansible_distribution == 'Amazon'
+
 - name: Include OS-specific variables for Fedora or FreeBSD.
   include_vars: "{{ ansible_distribution }}.yml"
   when: ansible_distribution == 'FreeBSD' or ansible_distribution == 'Fedora'
@@ -12,7 +16,8 @@
       'RedHat',
       'Rocky',
       'AlmaLinux'
-    ]
+    ] and 
+    ansible_distribution != "Amazon" 
 
 - name: Include version-specific variables for Ubuntu.
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
@@ -28,8 +33,11 @@
   when: java_packages is not defined
 
 # Setup/install tasks.
+- include_tasks: setup-Amazon.yml
+  when: ansible_distribution == 'Amazon'
+
 - include_tasks: setup-RedHat.yml
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat' and ansible_distribution != 'Amazon'
 
 - include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
